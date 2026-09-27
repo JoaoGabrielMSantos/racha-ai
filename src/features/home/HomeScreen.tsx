@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react'
 import { friendlyError } from '@/api/errors'
 import { useMyGroups, type GroupSummary } from '@/api/groups'
 import { useMyProfile } from '@/api/profile'
+import { useHomeRealtime } from '@/api/realtime'
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
 import { GroupCard } from '@/components/GroupCard'
@@ -16,6 +17,7 @@ export default function HomeScreen() {
   const navigate = useNavigate()
   const { data: me } = useMyProfile()
   const groups = useMyGroups()
+  useHomeRealtime()
   const name = me?.displayName ?? ''
 
   return (

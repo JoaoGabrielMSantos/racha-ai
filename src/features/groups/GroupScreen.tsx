@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router'
 import { ChevronLeft, Ellipsis, Plus } from 'lucide-react'
 import { friendlyError } from '@/api/errors'
 import { useGroup, useGroupMembers } from '@/api/groups'
-import { useGroupMembersRealtime } from '@/api/realtime'
+import { useGroupRealtime } from '@/api/realtime'
 import { useGroupExpenses } from '@/api/expenses'
 import { ExpensesTab } from '@/features/expenses/ExpensesTab'
 import { useGroupSettlements } from '@/api/settlements'
@@ -53,7 +53,7 @@ export default function GroupScreen() {
   )
   const myBalance = money?.balances[meId] ?? 0
   const myPendingCount = money?.pending.filter((p) => p.from === meId).length ?? 0
-  useGroupMembersRealtime(id)
+  useGroupRealtime(id)
 
   const setTab = (t: GroupTab) => setParams(t === 'gastos' ? {} : { tab: t }, { replace: true })
 
