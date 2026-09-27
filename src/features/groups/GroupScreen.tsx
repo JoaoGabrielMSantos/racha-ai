@@ -6,6 +6,12 @@ import { useGroup, useGroupMembers } from '@/api/groups'
 import { useGroupMembersRealtime } from '@/api/realtime'
 import { useGroupExpenses } from '@/api/expenses'
 import { ExpensesTab } from '@/features/expenses/ExpensesTab'
+import { useGroupSettlements } from '@/api/settlements'
+import { useSession } from '@/auth/auth-context'
+import { BalanceCard } from '@/features/balances/BalanceCard'
+import { BalancesTab } from '@/features/balances/BalancesTab'
+import { SettleTab } from '@/features/settle/SettleTab'
+import { groupMoney } from '@/lib/group-money'
 import { formatBRL } from '@/lib/money'
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
@@ -30,7 +36,23 @@ export default function GroupScreen() {
   const expenses = useGroupExpenses(id)
   const memberMap = useMemo(() => new Map((members.data ?? []).map((m) => [m.id, m])), [members.data])
   const total = (expenses.data ?? []).reduce((a, e) => a + e.amountCents, 0)
+  const settlements = useGroupSettlements(id)
+  const session = useSession()
+  const meId = session.user.id
   const [menu, setMenu] = useState(false)
+
+  // Saldos e acertos sugeridos: calculados no client a partir de gastos + partes + pagamentos
+  const moneyLoading = members.isPending || expenses.isPending || settlements.isPending
+  const moneyError = members.error ?? expenses.error ?? settlements.error
+  const money = useMemo(
+    () =>
+      members.data && expenses.data && settlements.data
+        ? groupMoney(expenses.data, settlements.data, members.data.map((m) => m.id))
+        : null,
+    [members.data, expenses.data, settlements.data],
+  )
+  const myBalance = money?.balances[meId] ?? 0
+  const myPendingCount = money?.pending.filter((p) => p.from === meId).length ?? 0
   useGroupMembersRealtime(id)
 
   const setTab = (t: GroupTab) => setParams(t === 'gastos' ? {} : { tab: t }, { replace: true })
@@ -99,6 +121,7 @@ export default function GroupScreen() {
                 </div>
               </div>
             </div>
+            <BalanceCard value={myBalance} loading={moneyLoading} onSettle={() => setTab('acertos')} />
             <SegmentedTabs
               label="Seções do grupo"
               value={tab}
@@ -106,13 +129,32 @@ export default function GroupScreen() {
               tabs={[
                 { key: 'gastos', label: 'Gastos' },
                 { key: 'saldos', label: 'Saldos' },
-                { key: 'acertos', label: 'Acertos' },
+                { key: 'acertos', label: 'Acertos', count: myPendingCount },
               ]}
             />
             {tab === 'gastos' ? (
               <ExpensesTab groupId={id} expenses={expenses} members={memberMap} />
+            ) : tab === 'saldos' ? (
+              <BalancesTab
+                balances={money?.balances ?? null}
+                members={members.data ?? []}
+                memberMap={memberMap}
+                meId={meId}
+                loading={moneyLoading}
+                error={moneyError ? friendlyError(moneyError) : undefined}
+              />
             ) : (
-              <EmptyState icon="🚧" title="Em construção" text="Saldos e acertos chegam na etapa 7." />
+              <SettleTab
+                groupId={id}
+                groupName={group.data.name}
+                pending={money?.pending ?? []}
+                settlements={settlements.data ?? []}
+                hasExpenses={(expenses.data?.length ?? 0) > 0}
+                memberMap={memberMap}
+                meId={meId}
+                loading={moneyLoading}
+                error={moneyError ? friendlyError(moneyError) : undefined}
+              />
             )}
             <GroupMenuSheet open={menu} onClose={() => setMenu(false)} groupId={id} groupName={group.data.name} />
           </>

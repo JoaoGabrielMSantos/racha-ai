@@ -7,6 +7,7 @@ import { InviteGate } from '@/features/groups/JoinScreen'
 
 const DevComponents = lazy(() => import('@/dev/DevComponents'))
 const DevExpenseForm = lazy(() => import('@/dev/DevExpenseForm'))
+const DevSettle = lazy(() => import('@/dev/DevSettle'))
 const LoginScreen = lazy(() => import('@/features/auth/LoginScreen'))
 const OnboardingScreen = lazy(() => import('@/features/onboarding/OnboardingScreen'))
 const HomeScreen = lazy(() => import('@/features/home/HomeScreen'))
@@ -22,6 +23,7 @@ const page = (el: ReactNode) => <Suspense fallback={<Splash />}>{el}</Suspense>
 export const router = createBrowserRouter([
   { path: '/dev/componentes', element: page(<DevComponents />) },
   { path: '/dev/novo-gasto', element: page(<DevExpenseForm />) },
+  { path: '/dev/acertos', element: page(<DevSettle />) },
   {
     element: <AppShell />,
     children: [
