@@ -37,16 +37,16 @@ as $$
 declare
   alphabet constant text := '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   bytes bytea := extensions.gen_random_bytes(7);
-  out   text := '';
+  code  text := '';
 begin
   for i in 0..6 loop
     -- 248 = 62*4: rejeita o resto para não enviesar
     while get_byte(bytes, i) >= 248 loop
       bytes := set_byte(bytes, i, get_byte(extensions.gen_random_bytes(1), 0));
     end loop;
-    out := out || substr(alphabet, (get_byte(bytes, i) % 62) + 1, 1);
+    code := code || substr(alphabet, (get_byte(bytes, i) % 62) + 1, 1);
   end loop;
-  return out;
+  return code;
 end;
 $$;
 
@@ -299,6 +299,13 @@ alter table public.expenses       enable row level security;
 alter table public.expense_splits enable row level security;
 alter table public.settlements    enable row level security;
 
+-- GRANTs explícitos: não depender da exposição automática do Data API.
+grant select, insert        on public.groups         to authenticated;
+grant select                on public.group_members  to authenticated;
+grant select, insert, delete on public.expenses       to authenticated;
+grant select, insert, delete on public.expense_splits to authenticated;
+grant select, insert, delete on public.settlements    to authenticated;
+
 -- Nada para anon.
 revoke all on public.profiles, public.groups, public.group_members,
               public.expenses, public.expense_splits, public.settlements from anon;
@@ -311,12 +318,12 @@ grant update (display_name, pix_key_type, pix_key)       on public.profiles to a
 
 create policy profiles_select on public.profiles
   for select to authenticated
-  using (id = auth.uid() or public.shares_group_with(id));
+  using (id = (select auth.uid()) or public.shares_group_with(id));
 
 create policy profiles_update on public.profiles
   for update to authenticated
-  using (id = auth.uid())
-  with check (id = auth.uid());
+  using (id = (select auth.uid()))
+  with check (id = (select auth.uid()));
 
 -- groups: o client gera o uuid (crypto.randomUUID) e insere com return=minimal,
 -- porque o RETURNING seria checado antes do trigger que cria a membership.
@@ -329,7 +336,7 @@ create policy groups_select on public.groups
 
 create policy groups_insert on public.groups
   for insert to authenticated
-  with check (created_by = auth.uid());
+  with check (created_by = (select auth.uid()));
 
 create policy groups_update on public.groups
   for update to authenticated
@@ -354,16 +361,16 @@ create policy expenses_select on public.expenses
 
 create policy expenses_insert on public.expenses
   for insert to authenticated
-  with check (public.is_group_member(group_id) and created_by = auth.uid());
+  with check (public.is_group_member(group_id) and created_by = (select auth.uid()));
 
 create policy expenses_update on public.expenses
   for update to authenticated
-  using (public.is_group_member(group_id) and (created_by = auth.uid() or paid_by = auth.uid()))
-  with check (public.is_group_member(group_id) and (created_by = auth.uid() or paid_by = auth.uid()));
+  using (public.is_group_member(group_id) and (created_by = (select auth.uid()) or paid_by = (select auth.uid())))
+  with check (public.is_group_member(group_id) and (created_by = (select auth.uid()) or paid_by = (select auth.uid())));
 
 create policy expenses_delete on public.expenses
   for delete to authenticated
-  using (public.is_group_member(group_id) and (created_by = auth.uid() or paid_by = auth.uid()));
+  using (public.is_group_member(group_id) and (created_by = (select auth.uid()) or paid_by = (select auth.uid())));
 
 -- expense_splits: lê quem é membro; escreve quem pode editar o gasto-pai
 revoke update, truncate on public.expense_splits from authenticated;
@@ -378,14 +385,14 @@ create policy expense_splits_insert on public.expense_splits
   with check (exists (select 1 from public.expenses e
                       where e.id = expense_id
                         and public.is_group_member(e.group_id)
-                        and (e.created_by = auth.uid() or e.paid_by = auth.uid())));
+                        and (e.created_by = (select auth.uid()) or e.paid_by = (select auth.uid()))));
 
 create policy expense_splits_delete on public.expense_splits
   for delete to authenticated
   using (exists (select 1 from public.expenses e
                  where e.id = expense_id
                    and public.is_group_member(e.group_id)
-                   and (e.created_by = auth.uid() or e.paid_by = auth.uid())));
+                   and (e.created_by = (select auth.uid()) or e.paid_by = (select auth.uid()))));
 
 -- settlements: qualquer membro registra (inclusive entre terceiros);
 -- desfazer: created_by, from_user ou to_user.
@@ -397,12 +404,12 @@ create policy settlements_select on public.settlements
 
 create policy settlements_insert on public.settlements
   for insert to authenticated
-  with check (public.is_group_member(group_id) and created_by = auth.uid());
+  with check (public.is_group_member(group_id) and created_by = (select auth.uid()));
 
 create policy settlements_delete on public.settlements
   for delete to authenticated
   using (public.is_group_member(group_id)
-         and auth.uid() in (created_by, from_user, to_user));
+         and (select auth.uid()) in (created_by, from_user, to_user));
 
 -- -----------------------------------------------------------------------------
 -- RPCs
