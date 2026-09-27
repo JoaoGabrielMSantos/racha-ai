@@ -30,7 +30,7 @@ export function RequireProfile() {
   if (!profile.data.displayName) return <Navigate to="/onboarding" replace state={{ from: location }} />
   return (
     <>
-      <PendingInviteHandler />
+      {!location.pathname.startsWith('/c/') && <PendingInviteHandler />}
       <Outlet />
     </>
   )

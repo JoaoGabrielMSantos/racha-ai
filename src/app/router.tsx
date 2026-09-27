@@ -3,12 +3,17 @@ import { createBrowserRouter, Navigate } from 'react-router'
 import { AppShell } from './AppShell'
 import { RequireProfile, RequireSession } from './guards'
 import { Splash } from '@/components/Splash'
+import { InviteGate } from '@/features/groups/JoinScreen'
 
 const DevComponents = lazy(() => import('@/dev/DevComponents'))
 const LoginScreen = lazy(() => import('@/features/auth/LoginScreen'))
 const OnboardingScreen = lazy(() => import('@/features/onboarding/OnboardingScreen'))
 const HomeScreen = lazy(() => import('@/features/home/HomeScreen'))
 const ProfileScreen = lazy(() => import('@/features/profile/ProfileScreen'))
+const CreateGroupScreen = lazy(() => import('@/features/groups/CreateGroupScreen'))
+const InviteScreen = lazy(() => import('@/features/groups/InviteScreen'))
+const GroupScreen = lazy(() => import('@/features/groups/GroupScreen'))
+const JoinScreen = lazy(() => import('@/features/groups/JoinScreen'))
 
 const page = (el: ReactNode) => <Suspense fallback={<Splash />}>{el}</Suspense>
 
@@ -18,6 +23,12 @@ export const router = createBrowserRouter([
     element: <AppShell />,
     children: [
       { path: '/login', element: page(<LoginScreen />) },
+      // Convite: sem sessão guarda o code e vai pro login; com sessão (e perfil) entra no grupo.
+      {
+        path: '/c/:code',
+        element: <InviteGate />,
+        children: [{ element: <RequireProfile />, children: [{ index: true, element: page(<JoinScreen />) }] }],
+      },
       {
         element: <RequireSession />,
         children: [
@@ -27,6 +38,9 @@ export const router = createBrowserRouter([
             children: [
               { path: '/', element: page(<HomeScreen />) },
               { path: '/perfil', element: page(<ProfileScreen />) },
+              { path: '/novo-grupo', element: page(<CreateGroupScreen />) },
+              { path: '/g/:id', element: page(<GroupScreen />) },
+              { path: '/g/:id/convite', element: page(<InviteScreen />) },
             ],
           },
         ],
