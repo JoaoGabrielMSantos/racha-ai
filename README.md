@@ -2,6 +2,8 @@
 
 > **Racha a conta, não a amizade.** Web app mobile-first para dividir os gastos da viagem, da rep e do rolê — e acertar tudo com um Pix.
 
+**▶ Ao vivo:** [racha-ai-liart.vercel.app](https://racha-ai-liart.vercel.app)
+
 Cada pessoa lança o que pagou, o app calcula quem deve quanto pra quem, sugere o menor número razoável de transferências e gera o **QR Code Pix** (BR Code) de cada acerto, com o valor já preenchido.
 
 | Claro | Escuro |

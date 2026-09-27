@@ -1,0 +1,12 @@
+design
+docs
+supabase
+.claude
+.playwright-mcp
+node_modules
+dist
+.env
+.env.local
+*.local
+skills-lock.json
+.mcp.json
