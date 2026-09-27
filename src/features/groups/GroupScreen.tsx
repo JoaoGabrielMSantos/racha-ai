@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 import { ChevronLeft, Ellipsis, Plus } from 'lucide-react'
 import { friendlyError } from '@/api/errors'
 import { useGroup, useGroupMembers } from '@/api/groups'
 import { useGroupMembersRealtime } from '@/api/realtime'
+import { useGroupExpenses } from '@/api/expenses'
+import { ExpensesTab } from '@/features/expenses/ExpensesTab'
+import { formatBRL } from '@/lib/money'
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
 import { IconButton } from '@/components/IconButton'
@@ -24,6 +27,9 @@ export default function GroupScreen() {
   const tab: GroupTab = TABS.includes(params.get('tab') as GroupTab) ? (params.get('tab') as GroupTab) : 'gastos'
   const group = useGroup(id)
   const members = useGroupMembers(id)
+  const expenses = useGroupExpenses(id)
+  const memberMap = useMemo(() => new Map((members.data ?? []).map((m) => [m.id, m])), [members.data])
+  const total = (expenses.data ?? []).reduce((a, e) => a + e.amountCents, 0)
   const [menu, setMenu] = useState(false)
   useGroupMembersRealtime(id)
 
@@ -89,7 +95,7 @@ export default function GroupScreen() {
                   {group.data.name}
                 </h1>
                 <div className="text-[13px] text-ink2">
-                  {members.data ? plural(members.data.length, 'membro', 'membros') : ' '}
+                  {members.data ? `${plural(members.data.length, 'membro', 'membros')} · total ${formatBRL(total)}` : ' '}
                 </div>
               </div>
             </div>
@@ -103,7 +109,11 @@ export default function GroupScreen() {
                 { key: 'acertos', label: 'Acertos' },
               ]}
             />
-            <EmptyState icon="🚧" title="Em construção" text="Gastos, saldos e acertos chegam nas etapas 6 e 7." />
+            {tab === 'gastos' ? (
+              <ExpensesTab groupId={id} expenses={expenses} members={memberMap} />
+            ) : (
+              <EmptyState icon="🚧" title="Em construção" text="Saldos e acertos chegam na etapa 7." />
+            )}
             <GroupMenuSheet open={menu} onClose={() => setMenu(false)} groupId={id} groupName={group.data.name} />
           </>
         )}
