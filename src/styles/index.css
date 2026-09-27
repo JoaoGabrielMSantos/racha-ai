@@ -1,0 +1,171 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Tokens (design/README.md). Claro em :root; escuro em [data-theme="dark"].
+   [data-theme="light"] existe para permitir aninhar temas (ex.: /dev/componentes).
+--------------------------------------------------------------------------- */
+:root,
+[data-theme='light'] {
+  --bg: #f3f5f4;
+  --surface: #ffffff;
+  --surface2: #eaefee;
+  --ink: #0f1a19;
+  --ink2: #5a6a68;
+  --line: rgba(15, 26, 25, 0.1);
+  --brand: #32bcad;
+  --brandText: #0e8c80;
+  --onBrand: #04302b;
+  --pos: #0e8c80;
+  --posBg: #ddf4f1;
+  --neg: #d9482a;
+  --negBg: #ffe9e2;
+  --shadow: 0 1px 2px rgba(15, 26, 25, 0.04), 0 6px 20px rgba(15, 26, 25, 0.05);
+  --scrim: rgba(8, 14, 13, 0.45);
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #0a1110;
+  --surface: #141d1c;
+  --surface2: #1e2928;
+  --ink: #ecf4f3;
+  --ink2: #94a5a2;
+  --line: rgba(255, 255, 255, 0.09);
+  --brand: #32bcad;
+  --brandText: #4fd6c6;
+  --onBrand: #04302b;
+  --pos: #4fd6c6;
+  --posBg: rgba(50, 188, 173, 0.16);
+  --neg: #ff8b6e;
+  --negBg: rgba(255, 107, 74, 0.15);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  --scrim: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface2);
+  --color-ink: var(--ink);
+  --color-ink2: var(--ink2);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-text: var(--brandText);
+  --color-on-brand: var(--onBrand);
+  --color-pos: var(--pos);
+  --color-pos-bg: var(--posBg);
+  --color-neg: var(--neg);
+  --color-neg-bg: var(--negBg);
+  --color-scrim: var(--scrim);
+  /* iguais nos dois temas */
+  --color-bar-pos: #32bcad;
+  --color-bar-neg: #ff6b4a;
+  --color-whatsapp: #25d366;
+  --color-on-whatsapp: #06301a;
+
+  --shadow-card: var(--shadow);
+  --shadow-brand: 0 10px 24px rgba(50, 188, 173, 0.3);
+  --shadow-fab: 0 12px 28px rgba(50, 188, 173, 0.4);
+  --shadow-tab: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-toast: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  --animate-ra-in: ra-in 0.3s ease both;
+  --animate-ra-in-slow: ra-in 0.35s ease both;
+  --animate-ra-fade: ra-fade 0.25s ease both;
+  --animate-ra-sheet: ra-sheet 0.32s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  --animate-ra-shimmer: ra-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes ra-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes ra-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ra-sheet {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+@keyframes ra-shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease;
+  }
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+  input::placeholder {
+    color: inherit;
+    opacity: 0.4;
+  }
+  /* Scrollbars ocultas (README) */
+  * {
+    scrollbar-width: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes ra-sheet-out {
+  from { transform: none; }
+  to { transform: translateY(100%); }
+}
+@keyframes ra-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes ra-spin {
+  to { transform: rotate(360deg); }
+}
+@theme inline {
+  --animate-ra-sheet-out: ra-sheet-out 0.22s ease-in both;
+  --animate-ra-fade-out: ra-fade-out 0.22s ease-in both;
+  --animate-ra-spin: ra-spin 0.8s linear infinite;
+}

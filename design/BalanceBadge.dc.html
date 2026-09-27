@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none">
+<sc-if value="{{ isPos }}" hint-placeholder-val="{{ true }}"><div style="padding:6px 11px;border-radius:999px;background:var(--posBg);color:var(--pos);font-size:14px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-0.01em">+ {{ fmt }}</div></sc-if>
+<sc-if value="{{ isNeg }}" hint-placeholder-val="{{ false }}"><div style="padding:6px 11px;border-radius:999px;background:var(--negBg);color:var(--neg);font-size:14px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-0.01em">− {{ fmt }}</div></sc-if>
+<sc-if value="{{ isZero }}" hint-placeholder-val="{{ false }}"><div style="padding:6px 11px;border-radius:999px;background:var(--surface2);color:var(--ink2);font-size:13px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>Quite</div></sc-if>
+<sc-if value="{{ showCap }}" hint-placeholder-val="{{ false }}"><div style="font-size:11px;font-weight:600;color:var(--ink2);padding-right:4px">{{ cap }}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:160,&quot;height&quot;:80},&quot;amount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4500,&quot;tsType&quot;:&quot;number&quot;},&quot;caption&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const a = Number(this.props.amount) || 0;
+    const fmt = 'R$ ' + (Math.abs(a) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return { fmt, isPos: a > 0, isNeg: a < 0, isZero: a === 0, showCap: !!this.props.caption && a !== 0, cap: a > 0 ? 'a receber' : 'a pagar' };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button,input{font-family:inherit}
+input::placeholder{color:inherit;opacity:.4}
+a{color:#0E8C80}a:hover{color:#32BCAD}
+::-webkit-scrollbar{display:none}
+@keyframes raSheet{from{transform:translateY(100%)}to{transform:none}}
+@keyframes raFade{from{opacity:0}to{opacity:1}}
+@keyframes raIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="{{ rootStyle }}">
+
+<sc-if value="{{ statusBar }}" hint-placeholder-val="{{ false }}">
+<div style="height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:4px 30px 0;font-size:15px;font-weight:700;color:var(--ink)"><span>9:41</span><div style="display:flex;align-items:center;gap:6px"><div style="width:17px;height:11px;display:flex;align-items:flex-end;gap:2px"><div style="width:3px;height:4px;background:currentColor;border-radius:1px"></div><div style="width:3px;height:6px;background:currentColor;border-radius:1px"></div><div style="width:3px;height:8px;background:currentColor;border-radius:1px"></div><div style="width:3px;height:11px;background:currentColor;border-radius:1px"></div></div><div style="width:25px;height:12px;border:1.5px solid currentColor;border-radius:4px;padding:1.5px;opacity:.9"><div style="width:70%;height:100%;background:currentColor;border-radius:1.5px"></div></div></div></div>
+</sc-if>
+
+<!-- LOGIN -->
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;padding:12px 24px 28px;animation:raIn .35s ease">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px;padding:24px 0">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="position:relative;width:58px;height:40px;flex:none"><div style="position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:#32BCAD"></div><div style="position:absolute;right:0;top:0;width:40px;height:40px;border-radius:50%;background:#FF6B4A;opacity:.92"></div></div>
+<div style="font-size:26px;font-weight:800;letter-spacing:-0.035em;color:var(--ink)">Racha Aí</div>
+</div>
+<h1 style="margin:0;font-size:42px;line-height:1.04;font-weight:800;letter-spacing:-0.04em;color:var(--ink);text-wrap:balance">Racha a conta, <span style="color:var(--brandText)">não a amizade.</span></h1>
+<p style="margin:0;font-size:16px;line-height:1.5;color:var(--ink2);text-wrap:pretty">Divida os gastos da viagem, da rep e do rolê. Na hora de acertar, é só um Pix.</p>
+</div>
+<sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Seu e-mail</label>
+<input type="email" value="{{ email }}" onChange="{{ onEmail }}" placeholder="voce@email.com" style="height:58px;width:100%;border:1.5px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);font-size:16px;font-weight:600;padding:0 18px;outline:none" style-focus="border-color:var(--brand)">
+<sc-if value="{{ emailOk }}" hint-placeholder-val="{{ false }}"><button onClick="{{ sendLink }}" style="height:58px;width:100%;border:none;border-radius:18px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;cursor:pointer" style-active="transform:scale(.98)">Receber link de acesso</button></sc-if>
+<sc-if value="{{ emailBad }}" hint-placeholder-val="{{ true }}"><button style="height:58px;width:100%;border:none;border-radius:18px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;opacity:.4;cursor:not-allowed">Receber link de acesso</button></sc-if>
+<p style="margin:4px 0 0;text-align:center;font-size:13px;color:var(--ink2)">Sem senha. A gente te manda um link mágico.</p>
+</div>
+</sc-if>
+<sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--surface);border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);animation:raIn .3s ease">
+<div style="width:52px;height:52px;border-radius:18px;background:var(--posBg);color:var(--pos);display:flex;align-items:center;justify-content:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M4 7l8 6 8-6"></path></svg></div>
+<div style="font-size:21px;font-weight:800;letter-spacing:-0.02em;color:var(--ink)">Confere seu e-mail</div>
+<div style="font-size:15px;line-height:1.5;color:var(--ink2)">Mandamos um link pra <b style="color:var(--ink)">{{ email }}</b>. Toca nele e pronto, você entra.</div>
+<button onClick="{{ doLogin }}" style="height:56px;width:100%;border:none;border-radius:18px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;cursor:pointer;margin-top:4px">Abrir link (demo)</button>
+<button onClick="{{ resetLogin }}" style="height:44px;border:none;background:none;color:var(--ink2);font-size:14px;font-weight:700;cursor:pointer">Usar outro e-mail</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- GRUPOS -->
+<sc-if value="{{ isGroups }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;position:relative;display:flex;flex-direction:column;animation:raIn .3s ease">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px 10px">
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:14px;font-weight:600;color:var(--ink2)">Oi, {{ firstName }}</div><div style="font-size:28px;font-weight:800;letter-spacing:-0.035em;color:var(--ink)">Seus grupos</div></div>
+<dc-import name="Avatar" who="{{ myName }}" hue="{{ myHue }}" size="md" on-click="{{ goProfile }}" hint-size="40px,40px"></dc-import>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:8px 20px 120px;display:flex;flex-direction:column;gap:12px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:var(--surface);border-radius:24px;padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink2)"><div style="width:8px;height:8px;border-radius:50%;background:var(--pos)"></div>A receber</div><div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--pos);font-variant-numeric:tabular-nums">{{ totalRec }}</div></div>
+<div style="background:var(--surface);border-radius:24px;padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink2)"><div style="width:8px;height:8px;border-radius:50%;background:var(--neg)"></div>A pagar</div><div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--neg);font-variant-numeric:tabular-nums">{{ totalPay }}</div></div>
+</div>
+<sc-for list="{{ groupsList }}" as="g" hint-placeholder-count="4">
+<div onClick="{{ g.open }}" style="display:flex;align-items:center;gap:14px;padding:14px 16px 14px 14px;background:var(--surface);border-radius:26px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s ease" style-active="transform:scale(.985)">
+<div style="width:56px;height:56px;border-radius:19px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:28px;flex:none">{{ g.emoji }}</div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><div style="font-size:16px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.name }}</div><div style="font-size:13px;color:var(--ink2)">{{ g.sub }}</div></div>
+<dc-import name="BalanceBadge" amount="{{ g.bal }}" caption="{{ true }}" hint-size="96px,44px"></dc-import>
+</div>
+</sc-for>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:0;padding:28px 20px 26px;background:linear-gradient(to top,var(--bg) 62%,transparent)">
+<button onClick="{{ goCreate }}" style="height:58px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 10px 24px rgba(50,188,173,.3)" style-active="transform:scale(.98)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Novo grupo</button>
+</div>
+</div>
+</sc-if>
+
+<!-- CRIAR GRUPO -->
+<sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column;animation:raIn .3s ease">
+<div style="display:flex;align-items:center;gap:12px;padding:8px 20px">
+<button onClick="{{ goGroups }}" style="width:44px;height:44px;border-radius:50%;border:none;background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<div style="font-size:17px;font-weight:800;color:var(--ink)">Novo grupo</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:20px 20px 24px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:8px 0">
+<div style="width:104px;height:104px;border-radius:34px;background:var(--surface);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:54px">{{ draftEmoji }}</div>
+<div style="font-size:20px;font-weight:800;letter-spacing:-0.02em;color:var(--ink);text-align:center;min-height:26px">{{ draftTitle }}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Nome do grupo</label>
+<input value="{{ draftName }}" onChange="{{ onDraftName }}" placeholder="Ex.: Viagem pra Ilhabela" maxlength="32" style="height:58px;width:100%;border:1.5px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);font-size:16px;font-weight:600;padding:0 18px;outline:none" style-focus="border-color:var(--brand)">
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Escolhe um emoji</label>
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px">
+<sc-for list="{{ emojis }}" as="em" hint-placeholder-count="12">
+<button onClick="{{ em.onClick }}" style="{{ em.style }}">{{ em.e }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="padding:12px 20px 26px">
+<sc-if value="{{ draftOk }}" hint-placeholder-val="{{ false }}"><button onClick="{{ createGroup }}" style="height:58px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;cursor:pointer" style-active="transform:scale(.98)">Criar grupo</button></sc-if>
+<sc-if value="{{ draftBad }}" hint-placeholder-val="{{ true }}"><button style="height:58px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;opacity:.4;cursor:not-allowed">Criar grupo</button></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- CONVITE -->
+<sc-if value="{{ isInvite }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column;animation:raIn .3s ease">
+<div style="display:flex;justify-content:flex-end;padding:8px 20px">
+<button onClick="{{ goGroupTab }}" style="width:44px;height:44px;border-radius:50%;border:none;background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:4px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:20px">
+<div style="width:96px;height:96px;border-radius:32px;background:var(--surface);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:50px">{{ g.emoji }}</div>
+<div style="display:flex;flex-direction:column;gap:8px;text-align:center">
+<div style="font-size:26px;font-weight:800;letter-spacing:-0.035em;color:var(--ink);text-wrap:balance">Agora chama a galera</div>
+<div style="font-size:15px;line-height:1.5;color:var(--ink2);text-wrap:pretty">Quem entrar pelo link já participa dos gastos de <b style="color:var(--ink)">{{ g.name }}</b>.</div>
+</div>
+<div style="width:100%;background:var(--surface);border-radius:22px;padding:8px 8px 8px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow)">
+<div style="flex:1;min-width:0;font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:ui-monospace,Menlo,monospace">{{ inviteLink }}</div>
+<button onClick="{{ copyInvite }}" style="height:44px;padding:0 14px;border-radius:14px;border:none;background:var(--surface2);color:var(--ink);font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;flex:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"></rect><path d="M5 15V6a2 2 0 012-2h9"></path></svg>Copiar</button>
+</div>
+<button onClick="{{ shareInvite }}" style="height:58px;width:100%;border:none;border-radius:20px;background:#25D366;color:#06301A;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer" style-active="transform:scale(.98)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7"></path><path d="M12 3v12M7 8l5-5 5 5"></path></svg>Compartilhar no WhatsApp</button>
+<div style="width:100%;display:flex;flex-direction:column;gap:12px;margin-top:6px">
+<div style="font-size:13px;font-weight:700;color:var(--ink2)">{{ joinedLabel }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:14px">
+<sc-for list="{{ memberChips }}" as="m" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;animation:raIn .35s ease"><dc-import name="Avatar" who="{{ m.name }}" hue="{{ m.hue }}" size="lg" hint-size="52px,52px"></dc-import><div style="font-size:12px;font-weight:600;color:var(--ink2)">{{ m.short }}</div></div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="padding:10px 20px 26px"><button onClick="{{ goGroupTab }}" style="height:54px;width:100%;border:1.5px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:700;cursor:pointer">Ir para o grupo</button></div>
+</div>
+</sc-if>
+
+<!-- GRUPO -->
+<sc-if value="{{ isGroup }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;position:relative;display:flex;flex-direction:column;animation:raIn .3s ease">
+<div style="display:flex;align-items:center;gap:10px;padding:8px 20px">
+<button onClick="{{ goGroups }}" style="width:44px;height:44px;border-radius:50%;border:none;background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<div style="flex:1"></div>
+<div style="display:flex;padding-right:8px"><sc-for list="{{ stack }}" as="m" hint-placeholder-count="4"><div style="margin-right:-8px"><dc-import name="Avatar" who="{{ m.name }}" hue="{{ m.hue }}" size="sm" hint-size="28px,28px"></dc-import></div></sc-for></div>
+<button onClick="{{ goInvite }}" style="height:40px;padding:0 14px;border-radius:999px;border:none;background:var(--surface);color:var(--ink);font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;box-shadow:var(--shadow);margin-left:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Convidar</button>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:10px 20px 110px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:14px">
+<div style="width:56px;height:56px;border-radius:19px;background:var(--surface);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:30px;flex:none">{{ g.emoji }}</div>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px"><div style="font-size:24px;font-weight:800;letter-spacing:-0.035em;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.name }}</div><div style="font-size:13px;color:var(--ink2)">{{ groupSub }}</div></div>
+</div>
+<div style="background:var(--surface);border-radius:26px;padding:18px 20px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="font-size:13px;font-weight:700;color:var(--ink2)">{{ myLabel }}</div>
+<sc-if value="{{ myPos }}" hint-placeholder-val="{{ false }}"><div style="font-size:34px;font-weight:800;letter-spacing:-0.04em;color:var(--pos);font-variant-numeric:tabular-nums">{{ myAbs }}</div></sc-if>
+<sc-if value="{{ myNeg }}" hint-placeholder-val="{{ true }}"><div style="font-size:34px;font-weight:800;letter-spacing:-0.04em;color:var(--neg);font-variant-numeric:tabular-nums">{{ myAbs }}</div></sc-if>
+<sc-if value="{{ myZero }}" hint-placeholder-val="{{ false }}"><div style="font-size:34px;font-weight:800;letter-spacing:-0.04em;color:var(--ink);font-variant-numeric:tabular-nums">R$ 0,00</div></sc-if>
+</div>
+<sc-if value="{{ myNeg }}" hint-placeholder-val="{{ false }}"><button onClick="{{ goSettle }}" style="height:42px;padding:0 16px;border-radius:999px;border:none;background:var(--negBg);color:var(--neg);font-size:14px;font-weight:800;cursor:pointer;flex:none">Acertar</button></sc-if>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;background:var(--surface2);border-radius:18px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}<sc-if value="{{ t.hasCount }}" hint-placeholder-val="{{ false }}"><span style="min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--neg);color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">{{ t.count }}</span></sc-if></button></sc-for>
+</div>
+
+<!-- tab gastos -->
+<sc-if value="{{ tabGastos }}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{ hasExpenses }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ expenseList }}" as="x" hint-placeholder-count="4">
+<dc-import name="ExpenseCard" desc="{{ x.desc }}" payer-name="{{ x.payerName }}" payer-short="{{ x.payerShort }}" hue="{{ x.hue }}" amount="{{ x.amount }}" my-share="{{ x.myShare }}" i-paid="{{ x.iPaid }}" date="{{ x.date }}" hint-size="100%,72px"></dc-import>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ noExpenses }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:36px 16px 20px">
+<div style="width:96px;height:96px;border-radius:32px;background:var(--surface);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:44px">🧾</div>
+<div style="font-size:21px;font-weight:800;letter-spacing:-0.02em;color:var(--ink)">Nenhum gasto ainda</div>
+<div style="font-size:15px;line-height:1.5;color:var(--ink2);max-width:280px;text-wrap:pretty">Pagou alguma coisa pra galera? Registra aqui que o Racha Aí faz as contas.</div>
+<button onClick="{{ openExpense }}" style="height:52px;padding:0 22px;border:none;border-radius:18px;background:var(--brand);color:var(--onBrand);font-size:15px;font-weight:700;cursor:pointer;margin-top:6px">Adicionar primeiro gasto</button>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- tab saldos -->
+<sc-if value="{{ tabSaldos }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--surface);border-radius:26px;box-shadow:var(--shadow);padding:4px 18px">
+<sc-for list="{{ balRows }}" as="r" hint-placeholder-count="4">
+<div style="{{ r.rowStyle }}">
+<dc-import name="Avatar" who="{{ r.full }}" hue="{{ r.hue }}" size="md" hint-size="40px,40px"></dc-import>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:9px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:15px;font-weight:700;color:var(--ink)">{{ r.name }}</span><span style="{{ r.amtStyle }}">{{ r.amt }}</span></div>
+<div style="position:relative;height:8px;border-radius:99px;background:var(--surface2)"><div style="position:absolute;left:50%;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink2);opacity:.35;border-radius:2px"></div><div style="{{ r.bar }}"></div></div>
+<div style="font-size:12px;font-weight:600;color:var(--ink2)">{{ r.cap }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- tab acertos -->
+<sc-if value="{{ tabAcertos }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ pending }}" as="p" hint-placeholder-count="2">
+<div style="background:var(--surface);border-radius:24px;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:14px;animation:raIn .3s ease">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="display:flex;align-items:center;gap:4px;flex:none"><dc-import name="Avatar" who="{{ p.fromFull }}" hue="{{ p.fromHue }}" size="sm" hint-size="28px,28px"></dc-import><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink2)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><dc-import name="Avatar" who="{{ p.toFull }}" hue="{{ p.toHue }}" size="sm" hint-size="28px,28px"></dc-import></div>
+<div style="flex:1;min-width:0;font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.fromShort }} → {{ p.toShort }}</div>
+<div style="{{ p.amtStyle }}">{{ p.amt }}</div>
+</div>
+<sc-if value="{{ p.fromMe }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:8px">
+<button onClick="{{ p.onPix }}" style="flex:1;height:50px;border:none;border-radius:16px;background:var(--brand);color:var(--onBrand);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer" style-active="transform:scale(.98)"><div style="width:11px;height:11px;border:2.2px solid currentColor;border-radius:3px;transform:rotate(45deg)"></div>Pagar com Pix</button>
+<button onClick="{{ p.onMark }}" style="height:50px;padding:0 14px;border:1.5px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);font-size:14px;font-weight:700;cursor:pointer">Já paguei</button>
+</div>
+</sc-if>
+<sc-if value="{{ p.toMe }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:8px">
+<button onClick="{{ p.onRemind }}" style="flex:1;height:50px;border:1.5px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);font-size:14px;font-weight:700;cursor:pointer">Lembrar no WhatsApp</button>
+<button onClick="{{ p.onMark }}" style="height:50px;padding:0 16px;border:none;border-radius:16px;background:var(--posBg);color:var(--pos);font-size:14px;font-weight:800;cursor:pointer">Recebi</button>
+</div>
+</sc-if>
+<sc-if value="{{ p.other }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ p.onMark }}" style="height:46px;width:100%;border:1.5px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);font-size:14px;font-weight:700;cursor:pointer">Marcar como pago</button>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ allSettled }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:28px 16px 12px;animation:raIn .35s ease">
+<div style="width:96px;height:96px;border-radius:50%;background:var(--posBg);color:var(--pos);display:flex;align-items:center;justify-content:center"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></div>
+<div style="font-size:24px;font-weight:800;letter-spacing:-0.03em;color:var(--ink)">Tudo acertado 🎉</div>
+<div style="font-size:15px;line-height:1.5;color:var(--ink2);max-width:280px;text-wrap:pretty">Ninguém deve nada a ninguém neste grupo. Bora pro próximo rolê?</div>
+</div>
+</sc-if>
+<sc-if value="{{ nothingToSettle }}" hint-placeholder-val="{{ false }}">
+<div style="text-align:center;padding:32px 16px;font-size:15px;color:var(--ink2)">Nada pra acertar ainda. Quando alguém lançar um gasto, as contas aparecem aqui.</div>
+</sc-if>
+<sc-if value="{{ hasPaid }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:13px;font-weight:700;color:var(--ink2);margin-top:8px">Já pagos</div>
+<div style="background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:2px 16px">
+<sc-for list="{{ paidRows }}" as="p" hint-placeholder-count="2">
+<div style="{{ p.rowStyle }}">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><div style="font-size:14px;font-weight:700;color:var(--ink)">{{ p.fromShort }} → {{ p.toShort }}</div><div style="font-size:12px;color:var(--ink2)">{{ p.amt }} · {{ p.date }}</div></div>
+<div style="height:28px;padding:0 10px;border-radius:99px;background:var(--posBg);color:var(--pos);font-size:12px;font-weight:800;display:flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>Pago</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ showFab }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ openExpense }}" style="position:absolute;right:20px;bottom:26px;width:64px;height:64px;border-radius:22px;border:none;background:var(--brand);color:var(--onBrand);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 12px 28px rgba(50,188,173,.4)" style-active="transform:scale(.94)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- NOVO GASTO -->
+<sc-if value="{{ isExpense }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column;animation:raIn .3s ease">
+<div style="display:flex;align-items:center;gap:12px;padding:8px 20px">
+<button onClick="{{ goGroupTab }}" style="width:44px;height:44px;border-radius:50%;border:none;background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+<div style="display:flex;flex-direction:column"><div style="font-size:17px;font-weight:800;color:var(--ink)">Novo gasto</div><div style="font-size:12px;color:var(--ink2)">{{ expGroupName }}</div></div>
+</div>
+<div onClick="{{ openKeypad }}" style="{{ amountBox }}">
+<div style="font-size:13px;font-weight:700;color:var(--ink2)">Quanto foi?</div>
+<div style="display:flex;align-items:baseline;gap:8px;color:var(--ink)"><span style="font-size:24px;font-weight:700;color:var(--ink2)">R$</span><span style="{{ amountStyle }}">{{ amountDisplay }}</span></div>
+</div>
+<sc-if value="{{ keypad }}" hint-placeholder-val="{{ true }}">
+<div style="padding:8px 20px 26px;display:flex;flex-direction:column;gap:12px">
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<sc-for list="{{ keys }}" as="k" hint-placeholder-count="12"><button onClick="{{ k.onClick }}" style="height:62px;border:none;border-radius:20px;background:var(--surface);color:var(--ink);font-size:24px;font-weight:700;cursor:pointer;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center" style-active="background:var(--surface2);transform:scale(.97)">{{ k.label }}</button></sc-for>
+</div>
+<sc-if value="{{ amountOk }}" hint-placeholder-val="{{ false }}"><button onClick="{{ closeKeypad }}" style="height:58px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;cursor:pointer">Continuar</button></sc-if>
+<sc-if value="{{ amountZero }}" hint-placeholder-val="{{ true }}"><button style="height:58px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;opacity:.4;cursor:not-allowed">Continuar</button></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:6px 20px 20px;display:flex;flex-direction:column;gap:22px;animation:raIn .3s ease">
+<div style="display:flex;flex-direction:column;gap:10px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Descrição</label>
+<input value="{{ expDesc }}" onChange="{{ onDesc }}" placeholder="Ex.: Mercado, Uber, Airbnb" maxlength="40" style="height:56px;width:100%;border:1.5px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);font-size:16px;font-weight:600;padding:0 18px;outline:none" style-focus="border-color:var(--brand)">
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Quem pagou</label>
+<div style="display:flex;gap:16px;overflow-x:auto;padding:6px 4px 4px">
+<sc-for list="{{ payers }}" as="m" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:none"><dc-import name="Avatar" who="{{ m.name }}" hue="{{ m.hue }}" size="lg" selected="{{ m.selected }}" on-click="{{ m.onClick }}" hint-size="52px,52px"></dc-import><div style="{{ m.labelStyle }}">{{ m.short }}</div></div></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Como dividir</label>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ modes }}" as="c" hint-placeholder-count="3"><dc-import name="SplitChip" label="{{ c.label }}" active="{{ c.active }}" on-click="{{ c.onClick }}" hint-size="80px,40px"></dc-import></sc-for></div>
+<div style="background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:4px 14px">
+<sc-for list="{{ splitRows }}" as="r" hint-placeholder-count="4">
+<div onClick="{{ r.toggle }}" style="{{ r.rowStyle }}">
+<dc-import name="Avatar" who="{{ r.name }}" hue="{{ r.hue }}" size="sm" hint-size="28px,28px"></dc-import>
+<div style="flex:1;min-width:0;font-size:15px;font-weight:600;color:var(--ink)">{{ r.short }}</div>
+<sc-if value="{{ r.isCustom }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:12px;background:var(--surface2)"><span style="font-size:13px;font-weight:700;color:var(--ink2)">R$</span><input value="{{ r.val }}" onChange="{{ r.onVal }}" inputmode="decimal" placeholder="0,00" style="width:72px;border:none;background:none;outline:none;text-align:right;color:var(--ink);font-size:15px;font-weight:700"></div></sc-if>
+<sc-if value="{{ r.notCustom }}" hint-placeholder-val="{{ true }}"><div style="font-size:15px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums">{{ r.share }}</div></sc-if>
+<sc-if value="{{ r.isSome }}" hint-placeholder-val="{{ false }}"><div style="{{ r.check }}"><sc-if value="{{ r.on }}" hint-placeholder-val="{{ true }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></sc-if></div></sc-if>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ isCustomMode }}" hint-placeholder-val="{{ false }}"><div style="{{ remainStyle }}">{{ remainText }}</div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Data</label>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><sc-for list="{{ dateChips }}" as="c" hint-placeholder-count="3"><dc-import name="SplitChip" label="{{ c.label }}" active="{{ c.active }}" on-click="{{ c.onClick }}" hint-size="80px,40px"></dc-import></sc-for></div>
+<sc-if value="{{ isOtherDate }}" hint-placeholder-val="{{ false }}"><input type="date" value="{{ otherDate }}" onChange="{{ onOtherDate }}" style="height:52px;width:100%;border:1.5px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:600;padding:0 16px;outline:none"></sc-if>
+</div>
+</div>
+<div style="padding:12px 20px 26px;border-top:1px solid var(--line);background:var(--bg)">
+<sc-if value="{{ expValid }}" hint-placeholder-val="{{ false }}"><button onClick="{{ saveExp }}" style="height:58px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;cursor:pointer" style-active="transform:scale(.98)">Salvar gasto · {{ amountFull }}</button></sc-if>
+<sc-if value="{{ expInvalid }}" hint-placeholder-val="{{ true }}"><button style="height:58px;width:100%;border:none;border-radius:20px;background:var(--surface2);color:var(--ink2);font-size:15px;font-weight:700;cursor:not-allowed">{{ invalidReason }}</button></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- PERFIL -->
+<sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column;animation:raIn .3s ease">
+<div style="display:flex;align-items:center;gap:12px;padding:8px 20px">
+<button onClick="{{ goGroups }}" style="width:44px;height:44px;border-radius:50%;border:none;background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<div style="font-size:17px;font-weight:800;color:var(--ink)">Perfil</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:12px 20px 26px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0">
+<dc-import name="Avatar" who="{{ myName }}" hue="{{ myHue }}" size="xl" hint-size="88px,88px"></dc-import>
+<div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--ink)">{{ myName }}</div>
+<div style="font-size:13px;color:var(--ink2)">{{ myEmail }}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<label style="font-size:13px;font-weight:700;color:var(--ink2)">Nome</label>
+<input value="{{ myName }}" onChange="{{ onName }}" style="height:56px;width:100%;border:1.5px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);font-size:16px;font-weight:600;padding:0 18px;outline:none" style-focus="border-color:var(--brand)">
+</div>
+<div style="background:var(--surface);border-radius:26px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:10px"><div style="width:12px;height:12px;border:2.4px solid var(--brandText);border-radius:3px;transform:rotate(45deg);margin:0 3px"></div><div style="font-size:16px;font-weight:800;color:var(--ink)">Sua chave Pix</div></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ pixTypes }}" as="c" hint-placeholder-count="4"><dc-import name="SplitChip" label="{{ c.label }}" active="{{ c.active }}" on-click="{{ c.onClick }}" hint-size="70px,40px"></dc-import></sc-for></div>
+<input value="{{ pixKey }}" onChange="{{ onPixKey }}" placeholder="{{ pixPlaceholder }}" style="height:54px;width:100%;border:1.5px solid var(--line);border-radius:16px;background:var(--surface2);color:var(--ink);font-size:15px;font-weight:600;padding:0 16px;outline:none" style-focus="border-color:var(--brand)">
+<div style="font-size:13px;line-height:1.45;color:var(--ink2)">É pra essa chave que a galera vai te pagar. Só aparece pra quem te deve.</div>
+</div>
+<div onClick="{{ toggleTheme }}" style="background:var(--surface);border-radius:22px;padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;cursor:pointer">
+<div style="font-size:15px;font-weight:700;color:var(--ink)">Modo escuro</div>
+<div style="{{ switchTrack }}"><div style="{{ switchKnob }}"></div></div>
+</div>
+<button onClick="{{ saveProfile }}" style="height:56px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;cursor:pointer">Salvar</button>
+<button onClick="{{ logout }}" style="height:48px;border:none;background:none;color:var(--neg);font-size:15px;font-weight:800;cursor:pointer">Sair da conta</button>
+</div>
+</div>
+</sc-if>
+
+<!-- PIX SHEET -->
+<sc-if value="{{ hasSheet }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;justify-content:flex-end">
+<div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:var(--scrim);animation:raFade .25s ease"></div>
+<div style="position:relative;background:var(--surface);border-radius:32px 32px 0 0;padding:10px 22px 26px;display:flex;flex-direction:column;gap:16px;animation:raSheet .32s cubic-bezier(.2,.9,.3,1);max-height:92%;overflow-y:auto">
+<div style="width:40px;height:5px;border-radius:99px;background:var(--line);align-self:center;margin-bottom:2px"></div>
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:18px;font-weight:800;color:var(--ink)">Pagar com Pix</div><button onClick="{{ closeSheet }}" style="width:36px;height:36px;border-radius:50%;border:none;background:var(--surface2);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+<div style="font-size:40px;font-weight:800;letter-spacing:-0.045em;color:var(--neg);font-variant-numeric:tabular-nums">{{ pixAmount }}</div>
+<div style="display:flex;align-items:center;gap:8px"><dc-import name="Avatar" who="{{ pixName }}" hue="{{ pixHue }}" size="sm" hint-size="28px,28px"></dc-import><div style="font-size:14px;color:var(--ink2)">para <b style="color:var(--ink)">{{ pixName }}</b></div></div>
+</div>
+<div style="align-self:center;width:216px;height:216px;padding:14px;background:#FFFFFF;border-radius:24px;box-shadow:0 0 0 1px rgba(0,0,0,.06)">
+<div style="display:grid;grid-template-columns:repeat(29,1fr);width:100%;height:100%">
+<sc-for list="{{ qr }}" as="c" hint-placeholder-count="0"><div style="{{ c.s }}"></div></sc-for>
+</div>
+</div>
+<div style="font-size:12px;text-align:center;color:var(--ink2)">Chave: {{ pixKeyOf }}</div>
+<button onClick="{{ copyPix }}" style="height:54px;width:100%;border:1.5px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer" style-active="transform:scale(.98)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"></rect><path d="M5 15V6a2 2 0 012-2h9"></path></svg>Copiar Pix copia e cola</button>
+<button onClick="{{ pixPaid }}" style="height:58px;width:100%;border:none;border-radius:20px;background:var(--brand);color:var(--onBrand);font-size:16px;font-weight:700;cursor:pointer" style-active="transform:scale(.98)">Marquei como pago</button>
+<div style="font-size:12px;line-height:1.45;text-align:center;color:var(--ink2);text-wrap:pretty">Abre o app do seu banco, escolhe Pix e escaneia o QR ou cola o código.</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:50%;bottom:104px;transform:translateX(-50%);z-index:30;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:16px;font-size:14px;font-weight:700;white-space:nowrap;animation:raIn .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.2)">{{ toast }}</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;groups&quot;,&quot;create&quot;,&quot;invite&quot;,&quot;gastos&quot;,&quot;saldos&quot;,&quot;acertos&quot;,&quot;expense&quot;,&quot;expenseForm&quot;,&quot;pix&quot;,&quot;profile&quot;,&quot;empty&quot;,&quot;settled&quot;],&quot;default&quot;:&quot;groups&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;statusBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;frameHeight&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = this.initial(props || {}); }
+  componentWillUnmount() { clearTimeout(this.tt); (this.joins || []).forEach(clearTimeout); }
+
+  P() {
+    const pr = (this.state && this.state.profile) || { name: 'Lucas Menezes', pixKey: 'lucas.menezes@gmail.com' };
+    return {
+      me: { name: pr.name || 'Você', short: 'Você', hue: 172, pix: pr.pixKey },
+      ana: { name: 'Ana Clara', short: 'Ana', hue: 30, pix: '(48) 99812-3344' },
+      bia: { name: 'Beatriz Lima', short: 'Bia', hue: 340, pix: 'bia.lima@gmail.com' },
+      caio: { name: 'Caio Ramos', short: 'Caio', hue: 265, pix: '123.456.789-10' },
+      duda: { name: 'Duda Souza', short: 'Duda', hue: 95, pix: '(11) 98877-6655' },
+      rafa: { name: 'Rafael Torres', short: 'Rafa', hue: 220, pix: 'rafa.torres@gmail.com' },
+      gabi: { name: 'Gabriela Nunes', short: 'Gabi', hue: 0, pix: '(21) 99123-4567' },
+      theo: { name: 'Théo Martins', short: 'Théo', hue: 140, pix: 'theo@martins.dev' }
+    };
+  }
+  eq(a, ids) { const o = {}; const n = ids.length; if (!n) return o; const b = Math.floor(a / n); let r = a - b * n; ids.forEach(id => { o[id] = b + (r > 0 ? 1 : 0); r--; }); return o; }
+  bal(g) {
+    const b = {}; g.members.forEach(id => b[id] = 0);
+    g.expenses.forEach(x => { b[x.payer] = (b[x.payer] || 0) + x.amount; Object.keys(x.shares).forEach(id => b[id] = (b[id] || 0) - x.shares[id]); });
+    g.payments.forEach(p => { b[p.from] = (b[p.from] || 0) + p.amount; b[p.to] = (b[p.to] || 0) - p.amount; });
+    return b;
+  }
+  settle(b) {
+    const cr = Object.keys(b).filter(k => b[k] > 0).map(id => ({ id, v: b[id] })).sort((x, y) => y.v - x.v);
+    const db = Object.keys(b).filter(k => b[k] < 0).map(id => ({ id, v: -b[id] })).sort((x, y) => y.v - x.v);
+    const out = []; let i = 0, j = 0;
+    while (i < db.length && j < cr.length) { const x = Math.min(db[i].v, cr[j].v); if (x > 0) out.push({ from: db[i].id, to: cr[j].id, amount: x }); db[i].v -= x; cr[j].v -= x; if (db[i].v === 0) i++; if (cr[j].v === 0) j++; }
+    return out;
+  }
+  num(c) { return (Math.abs(c) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  fmt(c) { return 'R$ ' + this.num(c); }
+  dLabel(d) { if (d === '2026-09-27') return 'Hoje'; if (d === '2026-09-26') return 'Ontem'; const p = d.split('-'); return parseInt(p[2], 10) + ' ' + ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][parseInt(p[1], 10) - 1]; }
+  parse(v) { if (!v) return 0; let s = String(v).trim(); s = s.includes(',') ? s.replace(/\./g, '').replace(',', '.') : s; const n = parseFloat(s); return isNaN(n) ? 0 : Math.round(n * 100); }
+
+  seed() {
+    const E = (id, desc, amount, payer, ids, date) => ({ id, desc, amount, payer, shares: this.eq(amount, ids), date });
+    const a1 = ['me', 'ana', 'bia', 'caio'], a2 = ['me', 'rafa', 'gabi', 'theo', 'duda'], a3 = ['me', 'ana', 'caio', 'duda', 'rafa'], a4 = ['me', 'ana', 'caio', 'duda', 'bia'];
+    const g4 = { id: 'g4', name: 'Aniversário da Bia', emoji: '🎂', members: a4, code: 'b1aNiv', payments: [], expenses: [E('d1', 'Presente', 36000, 'ana', ['me', 'ana', 'caio', 'duda'], '2026-08-28'), E('d2', 'Bolo e decoração', 24000, 'me', ['me', 'ana', 'caio', 'duda'], '2026-08-30')] };
+    g4.payments = this.settle(this.bal(g4)).map(p => ({ ...p, date: '2026-09-02' }));
+    return [
+      { id: 'g1', name: 'Viagem Floripa', emoji: '🏖️', members: a1, code: 'fL0r1p', payments: [], expenses: [
+        E('e1', 'Airbnb na Lagoa', 184000, 'ana', a1, '2026-09-12'), E('e2', 'Gasolina da ida', 26000, 'caio', a1, '2026-09-12'),
+        E('e3', 'Mercado', 31240, 'me', a1, '2026-09-13'), E('e4', 'Jantar na Costa da Lagoa', 48600, 'me', a1, '2026-09-14'),
+        E('e5', 'Passeio de barco', 36000, 'bia', ['me', 'ana', 'bia'], '2026-09-15'), E('e6', 'Uber pro aeroporto', 8400, 'ana', a1, '2026-09-16')] },
+      { id: 'g2', name: 'República Casa Verde', emoji: '🏠', members: a2, code: 'cAs4vD', payments: [{ from: 'rafa', to: 'me', amount: 60000, date: '2026-09-20' }], expenses: [
+        E('r1', 'Aluguel de setembro', 350000, 'me', a2, '2026-09-05'), E('r2', 'Internet', 12000, 'rafa', a2, '2026-09-08'),
+        E('r3', 'Conta de luz', 28750, 'gabi', a2, '2026-09-10'), E('r4', 'Mercado do mês', 64230, 'theo', a2, '2026-09-14'), E('r5', 'Gás', 11500, 'duda', a2, '2026-09-18')] },
+      { id: 'g3', name: 'Rolê de sexta', emoji: '🍻', members: a3, code: 'r0l3sx', payments: [], expenses: [
+        E('s1', 'Bar do Zé', 42000, 'caio', a3, '2026-09-25'), E('s2', 'Pizza depois', 18000, 'me', a3, '2026-09-26'), E('s3', 'Uber de volta', 6400, 'duda', ['me', 'duda', 'rafa', 'ana'], '2026-09-26')] },
+      g4
+    ];
+  }
+  blankExp(g) { const sel = {}; g.members.forEach(id => sel[id] = true); return { gid: g.id, digits: '', desc: '', payer: 'me', mode: 'equal', sel, custom: {}, date: 'today', other: '2026-09-20', keypad: true }; }
+  initial(p) {
+    const groups = this.seed();
+    const s = { theme: p.theme === 'dark' ? 'dark' : 'light', screen: 'groups', tab: 'gastos', gid: 'g1', email: '', sent: false, groups, sheet: null, toast: '', profile: { name: 'Lucas Menezes', email: 'lucas.menezes@gmail.com', pixType: 'E-mail', pixKey: 'lucas.menezes@gmail.com' }, draft: { name: '', emoji: '🏖️' }, exp: null };
+    s.exp = this.blankExp(groups[0]);
+    const sc = p.screen || 'groups';
+    const churras = m => ({ id: 'g5', name: 'Churras do Caio', emoji: '🔥', members: m, expenses: [], payments: [], code: 'k7Pq2x' });
+    if (sc === 'login') s.screen = 'login';
+    else if (sc === 'create') { s.screen = 'create'; s.draft = { name: 'Churras do Caio', emoji: '🔥' }; }
+    else if (sc === 'invite') { groups.unshift(churras(['me', 'caio', 'duda'])); s.gid = 'g5'; s.screen = 'invite'; }
+    else if (sc === 'gastos' || sc === 'saldos' || sc === 'acertos') { s.screen = 'group'; s.tab = sc; }
+    else if (sc === 'expense') { s.screen = 'expense'; s.exp.digits = '12750'; }
+    else if (sc === 'expenseForm') { s.screen = 'expense'; Object.assign(s.exp, { digits: '12750', desc: 'Pizza no Chico', mode: 'some', keypad: false, sel: { me: true, ana: true, bia: true, caio: false } }); }
+    else if (sc === 'pix') { s.screen = 'group'; s.tab = 'acertos'; s.sheet = { gid: 'g1', from: 'me', to: 'ana', amount: 6720 }; }
+    else if (sc === 'profile') s.screen = 'profile';
+    else if (sc === 'empty') { groups.unshift(churras(['me', 'caio', 'duda', 'ana'])); s.gid = 'g5'; s.screen = 'group'; }
+    else if (sc === 'settled') { s.gid = 'g4'; s.screen = 'group'; s.tab = 'acertos'; }
+    return s;
+  }
+  componentDidUpdate(pp) { if (pp.theme !== this.props.theme) this.setState({ theme: this.props.theme === 'dark' ? 'dark' : 'light' }); if (pp.screen !== this.props.screen) this.setState(this.initial(this.props)); }
+
+  toastMsg(m) { clearTimeout(this.tt); this.setState({ toast: m }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2200); }
+  copy(t, m) { try { navigator.clipboard && navigator.clipboard.writeText(t).catch(() => {}); } catch (e) {} this.toastMsg(m); }
+  wa(t) { try { window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank'); } catch (e) {} }
+  setExp(p) { this.setState(s => ({ exp: { ...s.exp, ...p } })); }
+  updGroup(gid, fn) { this.setState(s => ({ groups: s.groups.map(g => g.id === gid ? fn(g) : g) })); }
+  markPaid(gid, st, msg) { this.updGroup(gid, g => ({ ...g, payments: [...g.payments, { from: st.from, to: st.to, amount: st.amount, date: '2026-09-27' }] })); this.setState({ sheet: null }); this.toastMsg(msg || 'Pagamento registrado'); }
+  createGroup() {
+    const d = this.state.draft; if (!d.name.trim()) return;
+    const id = 'g' + Date.now(), code = Math.random().toString(36).slice(2, 8);
+    const ng = { id, name: d.name.trim(), emoji: d.emoji, members: ['me'], expenses: [], payments: [], code };
+    this.setState(s => ({ groups: [ng, ...s.groups], gid: id, screen: 'invite', tab: 'gastos', draft: { name: '', emoji: '🏖️' } }));
+    const P = this.P();
+    this.joins = [['caio', 1800], ['duda', 3400], ['ana', 5200]].map(([m, t]) => setTimeout(() => { this.updGroup(id, g => g.members.includes(m) ? g : { ...g, members: [...g.members, m] }); this.toastMsg(P[m].short + ' entrou no grupo'); }, t));
+  }
+  shares(e, g, c) {
+    if (e.mode === 'equal') return this.eq(c, g.members);
+    if (e.mode === 'some') return this.eq(c, g.members.filter(id => e.sel[id]));
+    const o = {}; g.members.forEach(id => o[id] = this.parse(e.custom[id])); return o;
+  }
+  saveExp() {
+    const s = this.state, e = s.exp, g = s.groups.find(x => x.id === e.gid), c = parseInt(e.digits || '0', 10);
+    const sh = this.shares(e, g, c); Object.keys(sh).forEach(k => { if (!sh[k]) delete sh[k]; });
+    const date = e.date === 'today' ? '2026-09-27' : e.date === 'yesterday' ? '2026-09-26' : (e.other || '2026-09-27');
+    const ex = { id: 'x' + Date.now(), desc: e.desc.trim(), amount: c, payer: e.payer, shares: sh, date };
+    this.setState(st => ({ groups: st.groups.map(x => x.id === g.id ? { ...x, expenses: [...x.expenses, ex] } : x), screen: 'group', tab: 'gastos', gid: g.id }));
+    this.toastMsg('Gasto adicionado');
+  }
+  qr(seed) {
+    const n = 29; let h = 2166136261; for (const ch of seed) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+    const rnd = () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; };
+    const f = (x, y, cx, cy) => { const dx = x - cx, dy = y - cy; if (dx < -1 || dy < -1 || dx > 7 || dy > 7) return null; if (dx < 0 || dy < 0 || dx > 6 || dy > 6) return false; return dx === 0 || dy === 0 || dx === 6 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4); };
+    const on = { background: '#0B1211' }, off = { background: 'transparent' }, out = [];
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      let r = f(x, y, 0, 0); if (r === null) r = f(x, y, n - 7, 0); if (r === null) r = f(x, y, 0, n - 7);
+      if (r === null) r = y === 6 ? x % 2 === 0 : x === 6 ? y % 2 === 0 : rnd() > 0.5;
+      out.push({ s: r ? on : off });
+    }
+    return out;
+  }
+  tokens(t) {
+    const L = { '--bg': '#F3F5F4', '--surface': '#FFFFFF', '--surface2': '#EAEFEE', '--ink': '#0F1A19', '--ink2': '#5A6A68', '--line': 'rgba(15,26,25,.1)', '--brand': '#32BCAD', '--brandText': '#0E8C80', '--onBrand': '#04302B', '--pos': '#0E8C80', '--posBg': '#DDF4F1', '--neg': '#D9482A', '--negBg': '#FFE9E2', '--shadow': '0 1px 2px rgba(15,26,25,.04), 0 6px 20px rgba(15,26,25,.05)', '--scrim': 'rgba(8,14,13,.45)' };
+    const D = { '--bg': '#0A1110', '--surface': '#141D1C', '--surface2': '#1E2928', '--ink': '#ECF4F3', '--ink2': '#94A5A2', '--line': 'rgba(255,255,255,.09)', '--brand': '#32BCAD', '--brandText': '#4FD6C6', '--onBrand': '#04302B', '--pos': '#4FD6C6', '--posBg': 'rgba(50,188,173,.16)', '--neg': '#FF8B6E', '--negBg': 'rgba(255,107,74,.15)', '--shadow': '0 1px 0 rgba(255,255,255,.03) inset', '--scrim': 'rgba(0,0,0,.6)' };
+    return t === 'dark' ? D : L;
+  }
+
+  renderVals() {
+    const s = this.state, P = this.P(), pr = s.profile;
+    const fh = parseInt(this.props.frameHeight, 10);
+    const rootStyle = { ...this.tokens(s.theme), position: 'relative', width: '100%', height: fh ? fh + 'px' : '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--bg)', color: 'var(--ink)', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif", colorScheme: s.theme, transition: 'background .25s ease' };
+    const go = (screen, x) => () => this.setState({ screen, ...(x || {}) });
+    const g = s.groups.find(x => x.id === s.gid) || s.groups[0];
+    const b = this.bal(g), my = b.me || 0;
+    const pendingRaw = this.settle(b);
+
+    // groups list
+    let rec = 0, pay = 0;
+    const groupsList = s.groups.map(gr => { const v = this.bal(gr).me || 0; if (v > 0) rec += v; else pay -= v; return { id: gr.id, emoji: gr.emoji, name: gr.name, bal: v, sub: `${gr.members.length} ${gr.members.length === 1 ? 'membro' : 'membros'} · ${gr.expenses.length} ${gr.expenses.length === 1 ? 'gasto' : 'gastos'}`, open: () => this.setState({ screen: 'group', gid: gr.id, tab: 'gastos' }) }; });
+
+    // group
+    const total = g.expenses.reduce((a, x) => a + x.amount, 0);
+    const exps = g.expenses.map((x, i) => ({ ...x, i })).sort((a, c) => a.date < c.date ? 1 : a.date > c.date ? -1 : c.i - a.i);
+    const expenseList = exps.map(x => ({ key: x.id, desc: x.desc, payerName: P[x.payer].name, payerShort: P[x.payer].short, hue: P[x.payer].hue, amount: x.amount, myShare: x.shares.me || 0, iPaid: x.payer === 'me', date: this.dLabel(x.date) }));
+    const tabDefs = [['gastos', 'Gastos'], ['saldos', 'Saldos'], ['acertos', 'Acertos']];
+    const tabs = tabDefs.map(([k, l]) => { const a = s.tab === k; const cnt = k === 'acertos' ? pendingRaw.filter(p => p.from === 'me').length : 0; return { label: l, hasCount: cnt > 0, count: cnt, onClick: () => this.setState({ tab: k }), style: { height: 42, border: 'none', borderRadius: 14, background: a ? 'var(--surface)' : 'transparent', color: a ? 'var(--ink)' : 'var(--ink2)', fontSize: 14, fontWeight: a ? 800 : 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, boxShadow: a ? '0 1px 3px rgba(0,0,0,.08)' : 'none', transition: 'all .15s ease' } }; });
+    const maxAbs = Math.max(1, ...g.members.map(id => Math.abs(b[id] || 0)));
+    const balRows = g.members.map((id, i) => { const v = b[id] || 0, pct = Math.abs(v) / maxAbs * 50; const bar = { position: 'absolute', top: 0, bottom: 0, borderRadius: 99, width: pct + '%', background: v >= 0 ? '#32BCAD' : '#FF6B4A', transition: 'width .4s ease' }; bar[v >= 0 ? 'left' : 'right'] = '50%';
+      return { key: id, full: P[id].name, name: id === 'me' ? 'Você' : P[id].name, hue: P[id].hue, amt: v === 0 ? 'R$ 0,00' : (v > 0 ? '+ ' : '− ') + this.fmt(v), amtStyle: { fontSize: 15, fontWeight: 800, fontVariantNumeric: 'tabular-nums', color: v > 0 ? 'var(--pos)' : v < 0 ? 'var(--neg)' : 'var(--ink2)' }, bar, cap: v > 0 ? 'tem a receber' : v < 0 ? 'deve pro grupo' : 'tá quite', rowStyle: { display: 'flex', alignItems: 'center', gap: 12, padding: '14px 0', borderTop: i ? '1px solid var(--line)' : 'none' } }; });
+    const pending = pendingRaw.map((p, i) => { const fromMe = p.from === 'me', toMe = p.to === 'me'; return { key: p.from + p.to + i, fromFull: P[p.from].name, toFull: P[p.to].name, fromHue: P[p.from].hue, toHue: P[p.to].hue, fromShort: P[p.from].short, toShort: P[p.to].short, amt: this.fmt(p.amount), amtStyle: { fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums', flex: 'none', color: fromMe ? 'var(--neg)' : toMe ? 'var(--pos)' : 'var(--ink)' }, fromMe, toMe, other: !fromMe && !toMe,
+      onPix: () => this.setState({ sheet: { gid: g.id, ...p } }), onMark: () => this.markPaid(g.id, p, toMe ? 'Recebimento confirmado' : 'Marcado como pago'), onRemind: () => this.wa(`Oi ${P[p.from].short}! Lembrete do Racha Aí: faltam ${this.fmt(p.amount)} do ${g.name}. Minha chave Pix: ${pr.pixKey}`) }; });
+    const paidRows = g.payments.slice().reverse().map((p, i) => ({ key: 'p' + i, fromShort: P[p.from].short, toShort: P[p.to].short, amt: this.fmt(p.amount), date: this.dLabel(p.date), rowStyle: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0', borderTop: i ? '1px solid var(--line)' : 'none' } }));
+
+    // expense
+    const e = s.exp, eg = s.groups.find(x => x.id === e.gid) || g, c = parseInt(e.digits || '0', 10);
+    const sh = this.shares(e, eg, c);
+    const cSum = e.mode === 'custom' ? Object.values(sh).reduce((a, v) => a + v, 0) : c;
+    const diff = c - cSum, selCount = eg.members.filter(id => e.sel[id]).length;
+    let invalidReason = '';
+    if (!c) invalidReason = 'Coloca o valor do gasto'; else if (!e.desc.trim()) invalidReason = 'Falta a descrição'; else if (e.mode === 'some' && !selCount) invalidReason = 'Escolhe quem participa'; else if (e.mode === 'custom' && diff !== 0) invalidReason = 'Os valores não fecham';
+    const keyList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '00', '0', '⌫'];
+    const keys = keyList.map(k => ({ label: k, onClick: () => { const d = this.state.exp.digits; if (k === '⌫') this.setExp({ digits: d.slice(0, -1) }); else if (d.length < 8) this.setExp({ digits: (d + k).replace(/^0+/, '') }); } }));
+    const big = e.keypad;
+    const splitRows = eg.members.map((id, i) => { const on = e.mode !== 'some' || !!e.sel[id]; return { key: id, name: P[id].name, short: id === 'me' ? 'Você' : P[id].name, hue: P[id].hue, share: this.fmt(sh[id] || 0), on, isCustom: e.mode === 'custom', notCustom: e.mode !== 'custom', isSome: e.mode === 'some', val: e.custom[id] || '',
+      onVal: ev => { const v = ev.target.value.replace(/[^\d.,]/g, ''); this.setState(st => ({ exp: { ...st.exp, custom: { ...st.exp.custom, [id]: v } } })); },
+      toggle: () => { if (this.state.exp.mode === 'some') this.setState(st => ({ exp: { ...st.exp, sel: { ...st.exp.sel, [id]: !st.exp.sel[id] } } })); },
+      rowStyle: { display: 'flex', alignItems: 'center', gap: 12, minHeight: 56, padding: '8px 0', borderTop: i ? '1px solid var(--line)' : 'none', cursor: e.mode === 'some' ? 'pointer' : 'default', opacity: on ? 1 : 0.5, transition: 'opacity .15s' },
+      check: { width: 24, height: 24, borderRadius: '50%', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: on ? 'var(--brand)' : 'transparent', color: 'var(--onBrand)', border: on ? 'none' : '2px solid var(--line)' } }; });
+
+    // pix
+    const sht = s.sheet;
+    const pixName = sht ? P[sht.to].name : '', pixKeyOf = sht ? P[sht.to].pix : '';
+    const pixCode = sht ? `00020126360014br.gov.bcb.pix01${String(pixKeyOf.length).padStart(2, '0')}${pixKeyOf}52040000530398654${String((sht.amount / 100).toFixed(2).length).padStart(2, '0')}${(sht.amount / 100).toFixed(2)}5802BR59${String(pixName.length).padStart(2, '0')}${pixName.toUpperCase()}6009SAO PAULO62070503***6304A1F3` : '';
+
+    const pixTypeList = ['CPF', 'Celular', 'E-mail', 'Aleatória'];
+    const ph = { CPF: '000.000.000-00', Celular: '(00) 00000-0000', 'E-mail': 'voce@email.com', 'Aleatória': 'Cole sua chave aleatória' };
+    const dark = s.theme === 'dark';
+    const emojiList = ['🏖️', '🏠', '🍻', '🎂', '✈️', '🔥', '⛺', '🎉', '🍕', '🚗', '⚽', '🛒'];
+
+    return {
+      rootStyle, statusBar: !!this.props.statusBar,
+      isLogin: s.screen === 'login', isGroups: s.screen === 'groups', isCreate: s.screen === 'create', isInvite: s.screen === 'invite', isGroup: s.screen === 'group', isExpense: s.screen === 'expense', isProfile: s.screen === 'profile',
+      // login
+      email: s.email, notSent: !s.sent, sent: s.sent, emailOk: /\S+@\S+\.\S+/.test(s.email), emailBad: !/\S+@\S+\.\S+/.test(s.email),
+      onEmail: ev => this.setState({ email: ev.target.value }), sendLink: () => this.setState({ sent: true }), resetLogin: () => this.setState({ sent: false }),
+      doLogin: () => this.setState(st => ({ screen: 'groups', sent: false, profile: { ...st.profile, email: st.email || st.profile.email } })),
+      // groups
+      firstName: (pr.name || 'você').split(' ')[0], myName: pr.name || 'Você', myHue: 172, myEmail: pr.email, goProfile: go('profile'), goCreate: go('create'), goGroups: go('groups', { sheet: null }),
+      totalRec: this.fmt(rec), totalPay: this.fmt(pay), groupsList,
+      // create
+      draftName: s.draft.name, draftEmoji: s.draft.emoji, draftTitle: s.draft.name.trim() || 'Seu novo grupo', draftOk: !!s.draft.name.trim(), draftBad: !s.draft.name.trim(),
+      onDraftName: ev => this.setState(st => ({ draft: { ...st.draft, name: ev.target.value } })), createGroup: () => this.createGroup(),
+      emojis: emojiList.map(em => { const a = s.draft.emoji === em; return { key: em, e: em, onClick: () => this.setState(st => ({ draft: { ...st.draft, emoji: em } })), style: { aspectRatio: '1', borderRadius: 16, fontSize: 24, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', background: a ? 'var(--posBg)' : 'var(--surface)', border: a ? '2px solid var(--brand)' : '2px solid transparent', boxShadow: a ? 'none' : 'var(--shadow)', transition: 'all .15s ease' } }; }),
+      // invite
+      g: { name: g.name, emoji: g.emoji }, inviteLink: 'racha.ai/c/' + g.code,
+      copyInvite: () => this.copy('https://racha.ai/c/' + g.code, 'Link copiado'), shareInvite: () => this.wa(`Bora rachar os gastos de "${g.name}" no Racha Aí? Entra aqui: https://racha.ai/c/${g.code}`),
+      joinedLabel: g.members.length === 1 ? 'Por enquanto, só você' : `Já entraram · ${g.members.length}`,
+      memberChips: g.members.map(id => ({ key: id, name: P[id].name, short: P[id].short, hue: P[id].hue })),
+      goGroupTab: go('group', { tab: 'gastos' }), goInvite: go('invite'),
+      // group
+      stack: g.members.slice(0, 4).map(id => ({ key: id, name: P[id].name, hue: P[id].hue })),
+      groupSub: `${g.members.length} ${g.members.length === 1 ? 'membro' : 'membros'} · total ${this.fmt(total)}`,
+      myLabel: my > 0 ? 'Você tem a receber' : my < 0 ? 'Você deve no grupo' : 'Você tá quite', myAbs: this.fmt(my), myPos: my > 0, myNeg: my < 0, myZero: my === 0,
+      goSettle: () => this.setState({ tab: 'acertos' }), tabs,
+      tabGastos: s.tab === 'gastos', tabSaldos: s.tab === 'saldos', tabAcertos: s.tab === 'acertos', showFab: s.tab === 'gastos' && g.expenses.length > 0,
+      hasExpenses: g.expenses.length > 0, noExpenses: g.expenses.length === 0, expenseList, balRows, pending, paidRows, hasPaid: paidRows.length > 0,
+      allSettled: pending.length === 0 && g.expenses.length > 0, nothingToSettle: g.expenses.length === 0,
+      openExpense: () => this.setState(st => ({ screen: 'expense', exp: this.blankExp(st.groups.find(x => x.id === st.gid) || st.groups[0]) })),
+      // expense
+      expGroupName: eg.emoji + ' ' + eg.name, keypad: big, formOpen: !big, keys, amountOk: c > 0, amountZero: !c,
+      amountDisplay: this.num(c), amountFull: this.fmt(c),
+      amountBox: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, padding: big ? '0 20px' : '8px 20px 14px', flex: big ? 1 : 'none', cursor: big ? 'default' : 'pointer' },
+      amountStyle: { fontSize: big ? 64 : 44, fontWeight: 800, letterSpacing: '-0.05em', fontVariantNumeric: 'tabular-nums', color: c ? 'var(--ink)' : 'var(--ink2)', transition: 'font-size .2s ease', lineHeight: 1.05 },
+      openKeypad: () => { if (!this.state.exp.keypad) this.setExp({ keypad: true }); }, closeKeypad: () => this.setExp({ keypad: false }),
+      expDesc: e.desc, onDesc: ev => this.setExp({ desc: ev.target.value }),
+      payers: eg.members.map(id => ({ key: id, name: P[id].name, short: P[id].short, hue: P[id].hue, selected: e.payer === id, onClick: () => this.setExp({ payer: id }), labelStyle: { fontSize: 12, fontWeight: e.payer === id ? 800 : 600, color: e.payer === id ? 'var(--ink)' : 'var(--ink2)' } })),
+      modes: [['equal', 'Igual pra todos'], ['custom', 'Por valor'], ['some', 'Só alguns']].map(([k, l]) => ({ key: k, label: l, active: e.mode === k, onClick: () => this.setExp({ mode: k }) })),
+      splitRows, isCustomMode: e.mode === 'custom',
+      remainText: diff > 0 ? `Faltam ${this.fmt(diff)} pra fechar` : diff < 0 ? `Passou ${this.fmt(diff)} do total` : 'Fechou certinho',
+      remainStyle: { fontSize: 13, fontWeight: 700, padding: '0 4px', color: diff === 0 ? 'var(--pos)' : 'var(--neg)' },
+      dateChips: [['today', 'Hoje'], ['yesterday', 'Ontem'], ['other', 'Outro dia']].map(([k, l]) => ({ key: k, label: l, active: e.date === k, onClick: () => this.setExp({ date: k }) })),
+      isOtherDate: e.date === 'other', otherDate: e.other, onOtherDate: ev => this.setExp({ other: ev.target.value }),
+      expValid: !invalidReason, expInvalid: !!invalidReason, invalidReason, saveExp: () => this.saveExp(),
+      // profile
+      onName: ev => this.setState(st => ({ profile: { ...st.profile, name: ev.target.value } })),
+      pixTypes: pixTypeList.map(t => ({ key: t, label: t, active: pr.pixType === t, onClick: () => this.setState(st => ({ profile: { ...st.profile, pixType: t, pixKey: t === 'E-mail' ? st.profile.email : '' } })) })),
+      pixKey: pr.pixKey, pixPlaceholder: ph[pr.pixType], onPixKey: ev => this.setState(st => ({ profile: { ...st.profile, pixKey: ev.target.value } })),
+      toggleTheme: () => this.setState(st => ({ theme: st.theme === 'dark' ? 'light' : 'dark' })),
+      switchTrack: { width: 52, height: 32, borderRadius: 99, padding: 3, background: dark ? 'var(--brand)' : 'var(--surface2)', transition: 'background .2s ease', flex: 'none' },
+      switchKnob: { width: 26, height: 26, borderRadius: '50%', background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,.2)', transform: dark ? 'translateX(20px)' : 'none', transition: 'transform .2s ease' },
+      saveProfile: () => this.toastMsg('Perfil salvo'), logout: () => this.setState({ screen: 'login', sent: false, email: '', sheet: null }),
+      // pix
+      hasSheet: !!sht, closeSheet: () => this.setState({ sheet: null }), pixName, pixHue: sht ? P[sht.to].hue : 0, pixKeyOf, pixAmount: sht ? this.fmt(sht.amount) : '',
+      qr: sht ? this.qr(pixCode) : [], copyPix: () => this.copy(pixCode, 'Código Pix copiado'), pixPaid: () => this.markPaid(sht.gid, sht, 'Pagamento registrado'),
+      hasToast: !!s.toast, toast: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
