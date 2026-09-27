@@ -1,4 +1,5 @@
 # Racha Aí
+Fiz para preencher um pouco do portfólio, espero que gostem!
 
 > **Racha a conta, não a amizade.** Web app mobile-first para dividir os gastos da viagem, da rep e do rolê — e acertar tudo com um Pix.
 
@@ -10,22 +11,6 @@ Cada pessoa lança o que pagou, o app calcula quem deve quanto pra quem, sugere 
 |---|---|
 | <img src="docs/screenshots/acertos-light.png" width="260" alt="Aba Acertos, tema claro"> | <img src="docs/screenshots/acertos-dark.png" width="260" alt="Aba Acertos, tema escuro"> |
 | <img src="docs/screenshots/pix-light.png" width="260" alt="Modal Pagar com Pix, tema claro"> | <img src="docs/screenshots/pix-dark.png" width="260" alt="Modal Pagar com Pix, tema escuro"> |
-
-<details>
-<summary>Mais telas</summary>
-
-| | Claro | Escuro |
-|---|---|---|
-| Login | <img src="docs/screenshots/login-light.png" width="220"> | <img src="docs/screenshots/login-dark.png" width="220"> |
-| Novo gasto (teclado) | <img src="docs/screenshots/novo-gasto-teclado-light.png" width="220"> | <img src="docs/screenshots/novo-gasto-teclado-dark.png" width="220"> |
-| Novo gasto (divisão) | <img src="docs/screenshots/novo-gasto-form-light.png" width="220"> | <img src="docs/screenshots/novo-gasto-form-dark.png" width="220"> |
-| Saldos | <img src="docs/screenshots/saldos-light.png" width="220"> | <img src="docs/screenshots/saldos-dark.png" width="220"> |
-
-Prancha de componentes (`/dev/componentes`):
-
-<img src="docs/screenshots/componentes-light.png" width="720">
-
-</details>
 
 ---
 
