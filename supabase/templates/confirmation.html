@@ -1,0 +1,19 @@
+<!--
+  Supabase → Authentication → Email Templates → "Confirm signup"
+  (é o e-mail que um usuário NOVO recebe ao pedir o link pela primeira vez)
+  Assunto sugerido: Seu código do Racha Aí: {{ .Token }}
+  Precisa conter {{ .ConfirmationURL }} (link) E {{ .Token }} (código de 6 dígitos).
+-->
+<div style="font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#F3F5F4; padding:32px 16px; color:#0F1A19;">
+  <div style="max-width:440px; margin:0 auto; background:#FFFFFF; border-radius:28px; padding:28px 24px;">
+    <div style="font-size:22px; font-weight:800; letter-spacing:-0.03em; margin-bottom:18px;">
+      <span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:#32BCAD; vertical-align:middle;"></span><span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:#FF6B4A; margin-left:-5px; margin-right:8px; vertical-align:middle;"></span>Racha Aí
+    </div>
+    <h1 style="font-size:22px; font-weight:800; letter-spacing:-0.02em; margin:0 0 8px;">Bem-vindo ao Racha Aí!</h1>
+    <p style="font-size:15px; line-height:1.5; color:#5A6A68; margin:0 0 20px;">Racha a conta, não a amizade. Toca no botão pra criar sua conta e entrar:</p>
+    <a href="{{ .ConfirmationURL }}" style="display:block; text-align:center; background:#32BCAD; color:#04302B; font-size:16px; font-weight:700; text-decoration:none; padding:17px 20px; border-radius:18px;">Entrar no Racha Aí</a>
+    <p style="font-size:15px; line-height:1.5; color:#5A6A68; margin:24px 0 8px;">Ou digita este código no app:</p>
+    <div style="font-size:34px; font-weight:800; letter-spacing:0.3em; text-align:center; background:#EAEFEE; border-radius:18px; padding:14px 0; font-variant-numeric:tabular-nums;">{{ .Token }}</div>
+    <p style="font-size:12px; line-height:1.5; color:#5A6A68; margin:20px 0 0;">O link e o código valem por pouco tempo e só uma vez. Se não foi você que pediu, pode ignorar este e-mail.</p>
+  </div>
+</div>
