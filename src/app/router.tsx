@@ -1,9 +1,8 @@
 import { lazy, Suspense, type ReactNode } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router'
 import { AppShell } from './AppShell'
-import { RequireProfile, RequireSession } from './guards'
+import { InviteGate, RequireProfile, RequireSession } from './guards'
 import { Splash } from '@/components/Splash'
-import { InviteGate } from '@/features/groups/JoinScreen'
 
 const DevComponents = lazy(() => import('@/dev/DevComponents'))
 const DevExpenseForm = lazy(() => import('@/dev/DevExpenseForm'))

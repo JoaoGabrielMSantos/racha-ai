@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Navigate, Outlet, useLocation, useNavigate } from 'react-router'
+import { Navigate, Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/api/supabase'
 import { friendlyError } from '@/api/errors'
@@ -7,7 +7,7 @@ import { useMyProfile } from '@/api/profile'
 import { useAuth } from '@/auth/auth-context'
 import { ScreenError, Splash } from '@/components/Splash'
 import { useToast } from '@/components/toast-context'
-import { clearPendingInvite, peekPendingInvite } from '@/lib/invite'
+import { clearPendingInvite, peekPendingInvite, savePendingInvite } from '@/lib/invite'
 
 /** Exige sessão. Sem sessão → /login, lembrando de onde veio. */
 export function RequireSession() {
@@ -59,4 +59,20 @@ function PendingInviteHandler() {
   }, [navigate, toast, qc])
 
   return null
+}
+
+/**
+ * /c/:code sem sessão: guarda o code (sessionStorage) e manda para /login.
+ * O login volta para cá (mesma aba via state; link mágico via emailRedirectTo).
+ */
+export function InviteGate() {
+  const { ready, session } = useAuth()
+  const { code = '' } = useParams()
+  const location = useLocation()
+  if (!ready) return <Splash />
+  if (!session) {
+    savePendingInvite(code)
+    return <Navigate to="/login" replace state={{ from: location }} />
+  }
+  return <Outlet />
 }

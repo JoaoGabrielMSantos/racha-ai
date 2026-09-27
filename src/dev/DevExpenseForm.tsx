@@ -24,7 +24,7 @@ export default function DevExpenseForm() {
       <div className="relative mx-auto flex h-dvh max-w-[480px] flex-col overflow-hidden bg-bg">
         <Screen>
           <ScreenHeader>
-            <ScreenTitle title="Novo gasto (prévia)" subtitle="🏖️ Viagem Floripa" />
+            <ScreenTitle title="Novo gasto" subtitle="🏖️ Viagem Floripa" />
           </ScreenHeader>
           <ExpenseForm
             groupId="dev"

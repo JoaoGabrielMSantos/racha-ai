@@ -1,28 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { Navigate, Outlet, useLocation, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { friendlyError } from '@/api/errors'
 import { useJoinGroup } from '@/api/groups'
-import { useAuth } from '@/auth/auth-context'
 import { Button } from '@/components/Button'
 import { EmptyState, Screen, ScrollArea } from '@/components/Screen'
 import { Splash } from '@/components/Splash'
-import { clearPendingInvite, savePendingInvite } from '@/lib/invite'
-
-/**
- * /c/:code sem sessão: guarda o code (sessionStorage) e manda para /login.
- * O login volta para cá (mesma aba via state; link mágico via emailRedirectTo).
- */
-export function InviteGate() {
-  const { ready, session } = useAuth()
-  const { code = '' } = useParams()
-  const location = useLocation()
-  if (!ready) return <Splash />
-  if (!session) {
-    savePendingInvite(code)
-    return <Navigate to="/login" replace state={{ from: location }} />
-  }
-  return <Outlet />
-}
+import { clearPendingInvite } from '@/lib/invite'
 
 /** Com sessão e perfil completo: entra no grupo (idempotente) e abre. */
 export default function JoinScreen() {

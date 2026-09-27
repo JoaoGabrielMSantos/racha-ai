@@ -65,7 +65,7 @@ export default function DevSettle() {
       <div className="relative mx-auto flex h-dvh max-w-[480px] flex-col overflow-hidden bg-bg">
         <Screen>
           <ScreenHeader>
-            <ScreenTitle title="Acertos (prévia)" subtitle="🏖️ Viagem Floripa" />
+            <ScreenTitle title="Viagem Floripa" subtitle="4 membros · total R$ 3.342,40" />
           </ScreenHeader>
           <ScrollArea className="flex flex-col gap-4 pt-2.5">
             <BalanceCard value={money.balances[ME] ?? 0} onSettle={() => setTab('acertos')} />
